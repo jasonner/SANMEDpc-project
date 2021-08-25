@@ -1,0 +1,85 @@
+/* 头部主nav */
+#Top {
+	padding: 1rem 0;
+}
+
+.compon-top {
+	display: flex;
+	align-items: center;
+}
+
+.compon-top h1 {
+	color: rgb(30, 120, 220);
+}
+
+.compon-top .title-url {
+	width: 10rem;
+}
+
+.compon-top .nav {
+	font-size: 1.15rem;
+	padding: 0 17px;
+	border-right: solid 1px #fff;
+	border-left: solid 1px #d6d3d3;
+}
+
+.compon-top .last-nav {
+	border-right: none !important
+}
+
+.compon-top .first-nav {
+	border-left: none !important
+}
+
+.compon-top .active {
+	color: rgb(30, 120, 220)
+}
+
+
+/* 左侧列表栏 */
+.compon-left {
+	height: 52rem;
+	width: 24%;
+	background: #e4e7ec;
+}
+
+.compon-left .compon-left-display {
+	display: flex;
+	justify-content: space-around;
+}
+
+.compon-left .compon-left-display-flex {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+/* 左侧列表栏图标状态 */
+.compon-left .tou{
+	border-bottom: 1px solid #c9ccd0;
+}
+.compon-left .top-tou{
+	font-size: 0.6rem;
+    padding: 23px;
+    color: #787878;
+}
+.compon-left .top-tou span:first-child{
+	padding-bottom: 5px;
+}
+
+/* 左侧列表账户数据部分 */
+.compon-left .xinxi{
+	border-bottom: 1px solid #c9ccd0;
+	border-top: 1px solid #fff;
+	padding: 1.5rem 2rem;
+}
+.compon-left .zhanghu{
+	font-size: 0.95rem;
+	justify-content: left;
+}
+.compon-left .zhanghu-xinxi{
+	margin-left: 0.3rem !important;
+	align-items: center;
+	display: flex;
+}

@@ -1,0 +1,350 @@
+.home {
+	box-shadow: 0px -1px 1px rgb(0 0 0 / 10%);
+	justify-content: space-between;
+	border: 1px solid #dadcdf;
+	background-color: #ecedf1;
+	align-items: flex-start;
+	-ms-overflow-style: none;
+	scrollbar-width: none; 
+	display: flex;
+	
+}
+
+.home-body {
+	width: 76%;
+	height: 52rem;
+}
+
+::-webkit-scrollbar {
+  display: none; /* Chrome Safari */
+}
+
+/* 主要内容创建直播间搜索部分 */
+.create-top {
+	border-left: 1px solid #ccc;
+	background: #e4e7ec;
+	align-items: center;
+	display: flex;
+	height: 6%;
+}
+
+.create-top .create-select {
+	text-align: center;
+	margin-left: 20px;
+	height: 30px;
+	width: 14%;
+}
+
+/* 输入框设置 */
+.create-top .create-select .el-select,
+.el-select>.el-input,
+.el-input__inner {
+	border-radius: 0.2rem !important;
+	text-align: center;
+	height: 100%;
+}
+
+.create-top .el-input__suffix {
+	height: 116%;
+}
+
+.create-top .el-select-dropdown__wrap {
+	max-height: initial;
+}
+
+.create-top .el-select .el-input .el-select__caret.is-reverse {
+	transform: translateY(-0.4rem) !important;
+}
+
+.el-dialog__headerbtn {
+	top: 15px !important;
+}
+
+.input-txt input {
+	text-align: left !important;
+	height: 2rem !important;
+	font-size: 12px;
+	color: #000;
+	font-weight: 500;
+}
+
+/* icon小图标 */
+.home .icon-url {
+	transform: rotate(-90deg);
+	border-radius: 0.3rem;
+	margin-left: 0.2rem;
+	background: #108ee9;
+	font-size: 1rem;
+	padding: 0.2rem;
+	color: white;
+}
+
+
+/* 创建直播间列表部分 */
+.create-body {
+	background-image: url(../img/bg2.png);
+	justify-content: space-between;
+	box-sizing: border-box;
+	align-items: flex-start;
+	display: flex;
+	padding: 2rem;
+	padding-top: 0;
+	height: 94%;
+	flex-wrap:wrap;
+}
+
+.create-body .create-jian {
+	justify-content: center;
+	flex-direction: column;
+	align-items: center;
+	background: white;
+	height: 13rem;
+	display: flex;
+	width: 45%;
+}
+
+.create-body .create-jian-shadow {
+	border-radius: 0.3rem;
+}
+
+.create-body .create-jian i {
+	font-size: 4rem;
+	color: #c9ccd0;
+	font-weight: 700;
+	cursor: pointer;
+}
+
+.create-body .create-jian div {
+	font-size: 1.2rem;
+	color: #c9ccd0;
+}
+
+.create-body .create-jian:hover i {
+	color: #97c9e5;
+}
+
+.create-body .create-jian:hover div {
+	color: #97c9e5;
+}
+
+/* 创建弹窗 */
+.create-form {}
+
+.create-form-input {
+	align-items: center;
+	margin-top: 10px;
+	display: flex;
+}
+
+.create-form-input:first-child {
+	margin-top: 0;
+}
+
+.el-dialog__footer {
+	border: 1px solid #e9e9e9;
+	background: #fafafa;
+	padding: 0.6rem;
+}
+
+/* 详情页 */
+.play-top {
+	border-radius: 5px;
+	width: 100%;
+}
+
+.play-top .create-top {
+	position: relative;
+	height: 8%
+}
+
+.play-top .create-select {
+	margin-left: 20px;
+	height: 40px;
+	width: 20%;
+}
+
+.play-top .create-select .el-select,
+.el-select>.el-input,
+.el-input__inner {
+	border-radius: 0.2rem !important;
+	background: transparent;
+	border-color: #bbb;
+	text-align: left;
+	font-weight: 700;
+	color: #000000;
+	height: 100%;
+}
+
+.play-top .el-input__suffix {
+	height: 105%;
+}
+
+.play-top .el-select-dropdown__wrap {
+	max-height: initial;
+}
+
+.play-top .el-select .el-input .el-select__caret.is-reverse {
+	transform: translateY(0rem) !important;
+}
+
+.play-top .el-select .el-input__inner {
+	padding-left: 35px;
+}
+
+.play-top .input-icon {
+	position: absolute;
+	font-size: 1.2rem;
+	left: 30px;
+}
+
+/* 详情页顶部按钮组 */
+.play-top .button-gir{
+	border: solid 1px #bbb;
+	position: absolute;
+	border-radius: 5px;
+	overflow: hidden;
+	display: flex;
+	right: 20px;
+}
+
+.play-top .button-gir div {
+	justify-content: center;
+	align-items: center;
+	font-size: 1rem;
+	padding: 0 15px;
+	display: flex;
+	height: 40px;
+}
+
+.play-top .button-gir div i {
+	font-size: 1.2rem;
+	padding-right: 5px;
+}
+
+.play-top .play-aciton {
+	color: #fff;
+	background-color: #3c8cd2;
+}
+
+.play-top .Fplay-aciton {
+	color: black;
+	background-color: white;
+}
+
+.play-top .play-body {
+	background-color: #fcfcfc;
+	border-radius: 10px;
+	overflow: hidden;
+	height: 100%;
+	width: 100%;
+}
+
+.play-top .play-left {
+	border-right: 1px solid #d9e1e7;
+	height: 100%;
+	width: 50%;
+}
+
+.play-top .play-left .play-left-top {
+	border-bottom: 1px solid #ebebeb;
+	align-items: center;
+	background: #f5f5f5;
+	padding: 5px 20px;
+	font-size: 1rem;
+	display: flex;
+}
+
+.play-top .play-left .play-left-center {
+	justify-content: space-around;
+	align-items: flex-start;
+	display: flex;
+	padding: 20px 5px;
+}
+
+.play-top .play-left .play-left-center .playLC-xin {
+	border: 1px solid rgba(60, 140, 210, 0.3);
+	flex-direction: column;
+	border-radius: 10px;
+	font-size: 0.6rem;
+	display: flex;
+	width: 40%;
+}
+
+.play-top .play-left .play-left-center .playLC-xin .playLC-xin1 {
+	padding: 0px 15px;
+	padding-top: 15px;
+	font-size: 1rem;
+}
+
+.play-top .play-left .play-left-center .playLC-xin .playLC-xin1 i {
+	margin-right: 5px;
+	font-size: 1.4rem;
+	color: #3c8cd2;
+}
+
+.play-top .play-left .play-left-center .playLC-xin .playLC-xin2 {
+	padding: 0px 15px;
+	margin: 6px 0;
+	color: #969696;
+}
+
+.play-top .play-left .play-left-center .playLC-xin .playLC-xin2 span {
+	font-size: 0.5rem;
+}
+
+.play-top .play-left .play-left-center .playLC-xin .playLC-xian {
+	margin-bottom: 10px;
+	border-bottom: 1px dashed rgba(60, 140, 210, 0.1);
+}
+
+.play-top .play-left .play-left-center .playLC-xin .playLC-xin3 {
+	padding: 0px 15px;
+	margin: 2px 0;
+	color: #787878;
+}
+
+.play-top .play-left .play-left-center .playLC-xin .playLC-xin3 span {
+	font-size: 0.5rem;
+}
+
+.play-top .play-left .play-left-center .playLC-xin .playLC-xin4 {
+	padding-bottom: 10px;
+}
+
+/* 详情页左侧下部分 */
+.play-bottom {
+	justify-content: center;
+	flex-direction: column;
+	align-items: center;
+	display: flex;
+}
+
+/* 直播文字 */
+.play-bottom .playB-txt {
+	margin-bottom: 10px;
+	font-size: 1.2rem;
+	font-weight: 700;
+	margin-top: 20px;
+}
+
+.play-bottom .playB-input-div {
+	justify-content: center;
+	align-items: center;
+	display: flex;
+	width: 100%;
+}
+
+.play-bottom .playB-input-div .playB-input {
+	width: 60%;
+	height: 25px;
+}
+
+/* 视频框 */
+.my-video {
+	width: 307.7px;
+	height: 173px;
+	background: black;
+	background-size: contain;
+	background-position: center;
+	background-repeat: no-repeat;
+}
