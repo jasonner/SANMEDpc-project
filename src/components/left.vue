@@ -2,15 +2,15 @@
 	<div id="Left" class="compon-left">
 		<!-- 顶部三图标状态 -->
 		<div class="compon-left-display tou">
-			<div class="compon-left-display-flex top-tou">
+			<div class="compon-left-display-flex top-tou"  @click="alertChange()">
 				<span>手机验证</span>
 				<el-avatar icon="el-icon-user-solid"></el-avatar>
 			</div>
-			<div class="compon-left-display-flex top-tou">
+			<div class="compon-left-display-flex top-tou"  @click="alertChange()">
 				<span> 邮箱验证</span>
 				<el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
 			</div>
-			<div class="compon-left-display-flex top-tou">
+			<div class="compon-left-display-flex top-tou"  @click="alertChange()">
 				<span>身份验证</span>
 				<el-avatar> user </el-avatar>
 			</div>
@@ -30,7 +30,7 @@
 				账户余额:
 				<div class="zhanghu-xinxi">
 					<span><strong>￥0.</strong><small>00</small></span>
-					<el-tag  effect='dark'>
+					<el-tag  effect='dark' @click="alertChange()">
 						充值
 					</el-tag>
 				</div>
@@ -39,14 +39,14 @@
 				代金券金额:
 				<div class="zhanghu-xinxi">
 					<span><strong>￥0.</strong><small>00</small></span>
-					<a href="###" target="_blank" rel="noopener noreferrer">查看</a>
+					<!-- <a href="###" target="_blank" rel="noopener noreferrer">查看</a> -->
 				</div>
 			</div>
 			<div class="compon-left-display zhanghu">
 				时长资源:
 				<div class="zhanghu-xinxi">
 					<span>暂无资源</span>
-					<a href="###" target="_blank" rel="noopener noreferrer">查看</a>
+					<!-- <a href="###" target="_blank" rel="noopener noreferrer">查看</a> -->
 				</div>
 			</div>
 			<div class="compon-left-display zhanghu">
@@ -62,14 +62,14 @@
 			<div class="compon-left-display zhanghu">
 				已建频道:
 				<div class="zhanghu-xinxi">
-					<strong>4</strong> <small>个</small>
+					<strong>{{postTitle}}</strong> <small>个</small>
 				</div>
 			</div>
 			<div class="compon-left-display zhanghu">
 				累计消费金额:
 				<div class="zhanghu-xinxi">
 					<span><strong>￥6.</strong><small>71</small></span>	
-					<a href="###" target="_blank" rel="noopener noreferrer">查看</a>
+					<!-- <a href="###" target="_blank" rel="noopener noreferrer">查看</a> -->
 				</div>
 			</div>
 			<div class="compon-left-display zhanghu">
@@ -96,19 +96,31 @@
 
 <script>
 	import '../assets/css/componeents.css'
-
 	export default {
-		props: ['LeftDate'],
+		props: ['postTitle'],
 		name: "Left",
 		data() {
-			return {};
+			return {
+				userid:''
+			};
 		},
 		components: {},
-		mounted() {},
-		methods: {},
+		mounted() {
+		},
+		methods: {
+			alertChange(){
+				this.$notify({
+					title: '警告',
+					message: '此功能在开发中...，敬请期待!',
+					type: 'warning'
+				});
+			}
+		},
 	};
 </script>
+<style scoped>
 
+</style>
 <style>
 	#Left .xinxi .zhanghu{
 		font-size: 14px;

@@ -5,21 +5,21 @@
     </div>
     <div class="content-list">
       <div class="list-left">
-        <el-switch v-model="openValue" inactive-text="显示开关"></el-switch>
+        <el-switch v-model="likeList.openValue" inactive-text="显示开关"></el-switch>
         <div class="countdown-display-position">
             <span>点赞数&nbsp;&nbsp;:&nbsp;&nbsp;</span>
-            <el-radio v-model="radioCountdownVal" :disabled="!openValue" label="1">显示</el-radio>
-            <el-radio v-model="radioCountdownVal" :disabled="!openValue" label="2">不显示</el-radio>
+            <el-radio v-model="likeList.type" :disabled="!likeList.openValue" label="1">显示</el-radio>
+            <el-radio v-model="likeList.type" :disabled="!likeList.openValue" label="2">不显示</el-radio>
         </div>
         <div class="live-prompt-text">
             <div><span >增加形式&nbsp;:</span></div>
-            <div><el-checkbox :disabled="radioCountdownVal=='2' || !openValue" v-model="BaseNumberChecked">默认点赞人数</el-checkbox></div>
-            <div><el-input class="live-prompt-input" :disabled="!BaseNumberChecked || radioCountdownVal=='2'" type="number" v-model="BaseNumberVal" placeholder="0"></el-input><span class="people-number">人</span></div>
+            <div><el-checkbox :disabled="likeList.type=='2' || !likeList.openValue" v-model="BaseNumberChecked">默认点赞人数</el-checkbox></div>
+            <div><el-input class="live-prompt-input" :disabled="!BaseNumberChecked || likeList.type=='2'" type="number" v-model="likeList.baseNumberVal" placeholder="0"></el-input><span class="people-number">人</span></div>
         </div>
         <div class="live-prompt-text">
-            <div class="actualNumber"><el-checkbox :disabled="radioCountdownVal=='2' ||!openValue" v-model="actualNumberChecked">实际点赞人数</el-checkbox> <span style="font-size:12px;margin-left:2px">X</span></div>
+            <div class="actualNumber"><el-checkbox :disabled="likeList.type=='2' ||!likeList.openValue" v-model="actualNumberChecked">实际点赞人数</el-checkbox> <span style="font-size:12px;margin-left:2px">X</span></div>
             <div>
-                <el-select class="select-people-number"  :disabled="!actualNumberChecked || radioCountdownVal=='2'" v-model="actualNumberVal" placeholder="请选择">
+                <el-select class="select-people-number"  :disabled="!actualNumberChecked || likeList.type=='2'" v-model="likeList.multiple" placeholder="请选择">
                     <el-option
                     v-for="item in actualNumberoptions"
                     :key="item.value"
@@ -42,25 +42,15 @@
       </div>
     </div>
     <div class="list-footer">
-        <el-button type="primary">提交</el-button>
+        <el-button type="primary" @click="submitChange()">提交</el-button>
     </div>
   </div>
 </template>
 <script>
+import qs from 'qs'
 export default {
     data() {
         return {
-            openValue:true,
-            radioCountdownVal:'1',
-            tipVal:'距直播开始',
-            startDatetime:'',
-            actualNumberVal:'1',
-            pickerOptions: {
-                disabledDate(v) {
-                return v.getTime() < new Date().getTime() - 86400000;
-                }
-            },
-            BaseNumberVal:'0',
             BaseNumberChecked:false,
             actualNumberChecked:false,
             actualNumberoptions:[{
@@ -94,15 +84,83 @@ export default {
                 value: '10',
                 label: '10'
             }],
+            liveid:'',
+            likeList:{
+                openValue:false,
+                type:'1',//（1.显示；2.不显示）
+                baseNumberVal:0,
+                multiple:1
+            }
         };
     },
     mounted() {
-
+        var query=this.$route.query;
+        if(query && query.userid){
+            this.getLiveDetail(query.userid,query.channel);
+        }else{
+            this.$router.push('/index');
+        };
     },
     methods: {
-        startTimeChange(val){
-            console.log(val);
-        }
+        //获取直播详情
+        getLiveDetail(userid,channel){
+            let that = this;
+            that.axios.get('live/query?userid='+userid+'&channel='+channel)
+            .then(function (res) {
+                if(res.data.code && res.data.code == '200'){
+                if(res.data.s){
+                    that.liveid = res.data.data.id;
+                    that.$nextTick(() => {
+                        that.getLiveSetting();
+                    })
+                };
+                }else{
+                    console.log(res.data.msg);
+                };
+            });
+        },
+
+        //获取频道设置
+        getLiveSetting(){
+            let that = this;
+            that.axios.get('live/query-decorate?liveid='+ that.liveid)
+            .then(function (res) {
+                if(res.data.code && res.data.code == '200'){
+                if(res.data.s){
+                    if(res.data.data.like && res.data.data.like !='null'){
+                        that.likeList = JSON.parse(res.data.data.like);
+                    };
+                   
+                };
+                }else{
+                    console.log(res.data.msg);
+                };
+            });
+        },
+        
+        //提交数据
+        submitChange(){
+            let that = this;
+            let promise = {
+                'liveid':that.liveid,
+                'like':JSON.stringify(that.likeList),
+            };
+            that.axios.post('live/decorate',qs.stringify(promise)).then((res) => {
+                if (res.data.code && res.data.code =='200') {
+                if(res.data && res.data.s){
+                    that.$message({
+                        message: res.data.msg,
+                        type: 'success'
+                    });
+                }else{
+                    that.$message.error(res.data.msg); 
+                }	
+                } else {
+                that.$message.error(res.data.msg);
+                }
+			});
+        },
+
     },
 };
 </script>
@@ -197,7 +255,7 @@ export default {
         height: 30px !important;
     }
     .likesSettingPage .select-people-number{
-        width: 28%;
+        width: 39%;
         height: 30px;
         line-height: 30px;
         margin-left: 20px;
@@ -214,7 +272,7 @@ export default {
     }
     .likesSettingPage .live-prompt-text .live-prompt-input{
         height: 30px;
-        width: 30%;
+        width: 40%;
         margin-left: 10px;
     }
     .likesSettingPage .live-prompt-text .el-checkbox{

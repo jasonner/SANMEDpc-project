@@ -6,11 +6,11 @@
 			</div>
 			<div class="header-list">
 				<div class="nav last-nav first-nav active" @click="goIndexPage()">首页</div>
-				<div class="nav last-nav first-nav ">门户</div>
-				<div class="nav last-nav first-nav ">应用</div>
-				<div class="nav last-nav first-nav ">媒体库</div>
-				<div class="nav last-nav first-nav ">账户</div>
-				<div class="nav last-nav first-nav ">观众画像</div>
+				<div class="nav last-nav first-nav "  @click="alertChange()">门户</div>
+				<div class="nav last-nav first-nav "  @click="alertChange()">应用</div>
+				<div class="nav last-nav first-nav "  @click="alertChange()">媒体库</div>
+				<div class="nav last-nav first-nav "  @click="alertChange()">账户</div>
+				<div class="nav last-nav first-nav "  @click="alertChange()">观众画像</div>
 			</div>
 			<div>
 				
@@ -32,6 +32,13 @@
 		methods: {
 			goIndexPage(){
 				this.$router.push('/index');
+			},
+			alertChange(){
+				this.$notify({
+					title: '警告',
+					message: '此功能在开发中...，敬请期待!',
+					type: 'warning'
+				});
 			}
 		},
 	};

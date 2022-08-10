@@ -3,7 +3,7 @@
 		<Top/>
 		<div class="home">
 			<!-- 左侧列表 -->
-			<Left />
+			<Left :post-title="allTotal" />
 			<!-- 内容部分 -->
 			<div class="home-body">
 				<!-- 顶头选择部分 -->
@@ -16,8 +16,8 @@
 					</div>
 					<i class="el-icon-s-fold icon-url"></i>
 					<div class="search-input">
-						<input type="text" v-model="seachName" @blur="seachLiveChange()" placeholder="请输入频道关键字"/>
-						<button @click="seachLiveChange()"><span class="el-icon-search"></span></button>
+						<!-- <input type="text" v-model="seachName" @blur="seachLiveChange()" placeholder="请输入频道关键字"/>
+						<button @click="seachLiveChange()"><span class="el-icon-search"></span></button> -->
 					</div>
 				</div>
 				<div class="create-body">
@@ -27,12 +27,13 @@
 					</div>
 					<div class="create-list create-jian-shadow" v-for="item in liveList" :key="item.id">
 						<div class="top-list" >
-							<el-tooltip class="item" effect="dark" content="关闭频道" placement="bottom-start">
-								<span>
+							<el-tooltip class="item" effect="dark" :content="item.OpenValue?'关闭频道':'开启频道'" placement="bottom-start">
+								<span @click="LiveIsOpen(item)">
 									<el-switch
 										v-model="item.OpenValue"
-										active-color="#108ee9"
-										inactive-color="#dfdfdf">
+										active-color="#f6ab00"
+										inactive-color="#dfdfdf"
+										>
 									</el-switch>
 								</span>
 							</el-tooltip>
@@ -50,32 +51,32 @@
 							<div class="list-left">
 								<img v-if="item.logo" :src="item.logo" alt="" srcset="">
 								<img v-else src="@/assets/img/logo1.png" alt="" srcset="">
-								<p v-if="item.OpenValue">列表播放中</p>
+								<p v-if="item.OpenValue">列表播放已开启</p>
 							</div>
 							<div class="list-right">
 								<p class="title">{{item.channel}}</p>
 								<p>直播开始时间&nbsp;:&nbsp;{{item.start_time}}</p>
-								<p>最后直播时间&nbsp;:&nbsp;该频道未直播过</p>
+								<p v-if="item.status === 0">最后直播时间&nbsp;:&nbsp;该频道未直播过</p>
 								<p>观看量:<i>0</i>次 <span>观看总时长<i>0</i>分钟</span></p>
 							</div>
 						</div>
 						<div class="list-footer">
-							<div>
+							<div @click="liveSetting(item)">
 								<i class="el-icon-video-camera-solid"></i>
 								<span>频道装修</span>
 							</div>
-							<div>
+							<div  @click="alertChange()">
 								<i class="el-icon-s-marketing"></i>
 								<span>分析报表</span>
 							</div>
-							<div>
+							<div @click="PClook(item)">
 								<i class="el-icon-s-platform"></i>
 								<span>PC预览</span>
 							</div>
-							<div>
+							<!-- <div>
 								<i class="el-icon-mobile"></i>
 								<span>手机预览</span>
-							</div>
+							</div> -->
 						</div>
 					</div>
 				</div>
@@ -265,6 +266,7 @@
 	import Left from '@/components/left.vue'
 	import qs from 'qs'
 	import OSS from 'ali-oss';
+	import { test, hello } from '@/util/utils.js'
 	export default {
 		name: "Home",
 		data() {
@@ -321,6 +323,7 @@
 					return v.getTime() < new Date().getTime() - 86400000;
 					}
 				},
+				allTotal:0,
 			};
 		},
 		components: {
@@ -337,6 +340,7 @@
 			}else{
 				this.$router.push('/login');
 			}
+			hello();
 		},
 		methods: {
 			//获取用户信息
@@ -385,9 +389,9 @@
 			//创建直播频道时间格式转换
 			startTimeChange(d){
 				let Year = d.getFullYear()+'-';
-				let Month = (d.getMonth() + 1) +'-';
-				let Day = d.getDate()>10?d.getDate()+ ' ':'0'+d.getDate()+'	';
-				let Hours = d.getHours()>10?d.getHours()+':':+'0'+d.getHours()+':';
+				let Month = (d.getMonth() + 1)>10?(d.getMonth() + 1)+'-':'0'+(d.getMonth() + 1)+'-';
+				let Day = d.getDate()>10?d.getDate()+ ' ':'0'+d.getDate()+' ';
+				let Hours = d.getHours()>10?d.getHours()+':':'0'+d.getHours()+':';
 				let Minutes = d.getMinutes()>10?d.getMinutes()+':':'0'+d.getMinutes()+':';
 				let Seconds = d.getSeconds()>10?d.getSeconds():'0'+d.getSeconds();
 				this.liveAddObj.start_time = Year+Month+Day+Hours+Minutes+Seconds;
@@ -480,13 +484,24 @@
 				let userid = that.userid;
 				that.axios.get('live/query?userid='+userid)
 				.then(function (res) {
-					console.log(res)
 					if(res.data.code && res.data.code == '200'){
 						if(res.data.data && res.data.data.length>0){
+							that.allTotal = res.data.data.length;
+							res.data.data.forEach(element => {
+								console.log(element);
+								if(element.status ===2){
+									element.OpenValue = false;
+								}else{
+									element.OpenValue = true;
+								}
+							});
 							that.liveList = res.data.data;
-						};
+						}else{
+							that.liveList = [];
+						}
 					}else{
-						that.$message.error(res.data.msg);
+						that.liveList = [];
+						console.log(res.data.msg);
 					};
 				});
 			},
@@ -610,10 +625,10 @@
 					this.$message.error("不支持的格式!")
 					return
 				};
-				const fileName = 'LehuiLive/'+file.file.uid + file.file.name;
+				let fileName = 'LehuiLive/'+file.file.name+'/'+'LehuiLive-oss'+file.file.lastModified;
 				console.log(fileName);
 				const _this = this;
-				_this.axios.get('https://cac.sanmedbio.com/forhoo/GetOSSSTS?dir=LehuiLive').then((result) =>{
+				_this.axios.get('https://cac.sanmedgene.com/forhoo/GetOSSSTS?dir=LehuiLive').then((result) =>{
 					console.log(result.data);
 					_this.client =  new OSS({
 						region: result.data.region,
@@ -725,6 +740,92 @@
 				this.$store.commit('setLiveValue', item);    
 				this.$router.push({path: '/liveDetail', query:{userid:item.userid,channel:item.channel}});
 			},
+
+			//频道装修
+			liveSetting(item){
+				this.$router.push({path: '/liveManage', query:{userid:item.userid,channel:item.channel}});
+			},
+
+			//PC预览
+			PClook(row){
+				window.open('https://h5.lehuitech.com/html/live/pc.html?id='+row.id, '_blank');
+			},
+
+			//开启直播
+			LiveIsOpen(row){
+				console.log(row)
+				let that = this;
+				if(row.status === 2){
+					that.$confirm('开启后观众能够看到直播画面', '确定开启观看页直播?', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+						type: 'warning'
+						}).then(() => {
+							let promise = {
+								liveid:row.id
+							}
+							that.axios.post('/live/resume_live',qs.stringify(promise))
+							.then(function (res) {
+								if(res.data.code && res.data.code == '200'){
+									that.getLiveListChange();
+									that.$message({
+										type: 'success',
+										message:'开启观看页直播成功'
+									});
+								}else{
+									console.log(res.data.msg);
+								};
+							});
+						}).catch(() => {
+						that.$message({
+							type: 'info',
+							message: '已取消'
+						});          
+					});
+				}else{
+					that.stopLiveChange(row);
+				}
+			},
+
+			//关闭直播
+			stopLiveChange(row){
+				let that = this;
+				let promise = {
+					liveid:row.id
+				}
+				that.$confirm('关闭后观众不能够看到直播画面', '确定关闭观看页直播', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+					}).then(() => {
+						that.axios.post('/live/stop_live',qs.stringify(promise))
+						.then(function (res) {
+							if(res.data.code && res.data.code == '200'){
+								that.getLiveListChange();
+								that.$message({
+									type: 'success',
+									message:'关闭观看页直播成功'
+								});
+							}else{
+								console.log(res.data.msg);
+							};
+						});
+					}).catch(() => {
+					that.$message({
+						type: 'info',
+						message: '已取消'
+					});          
+				});
+				
+			},
+
+			alertChange(){
+				this.$notify({
+					title: '警告',
+					message: '此功能在开发中...，敬请期待!',
+					type: 'warning'
+				});
+			}
 		},
 		
 	};
@@ -871,7 +972,7 @@
 }
 #HomePage .top-list span{
 	margin:5px;
-	color: #12b7f5;
+	color: #f6ab00;
 	font-size: 18px;
 	cursor: pointer;
 }
@@ -896,8 +997,9 @@
 	color: red;
 	border: 1px solid red;
 	border-radius: 20px;
-	width: 80px;
+	min-width: 110px;
 	margin: 0 auto;
+	text-align: center;
 }
 #HomePage .list-content .list-right{
 	width: 100%;
@@ -930,9 +1032,9 @@
 	display: block;
 	width: 100%;
 	font-size: 20px;
-	color: #1e78dc;
+	color: #f6ab00;
 	cursor: pointer;
-	border-left: 1px solid #3C8CD2;
+	border-left: 1px solid #f6ab00;
 }
 #HomePage .list-footer div span{
 	display: none;
@@ -941,7 +1043,7 @@
 	display: block;
 	font-size: 12px;
 	color: #fff;
-	background: #669fd1;
+	background: #f6ab00;
 	width: 100%;
 	height: 40px;
 	margin-top: -10px;

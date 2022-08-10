@@ -10,11 +10,11 @@
 					<div>基础设置</div>
 				</div>
 				<div class="BigList">
-					<div @click="jump('/play/playManage2')">观看页主题设置</div>
-					<div>直播引导图</div>
-					<div>直播倒计时</div>
-					<div>观众人数显示设置</div>
-					<div>点赞设置</div>
+					<div @click="routerLinke()">观看页主题设置</div>
+					<div @click="routerLinke()"> 直播引导图</div>
+					<div @click="routerLinke()">直播倒计时</div>
+					<div @click="routerLinke()">观众人数显示设置</div>
+					<div @click="routerLinke()">点赞设置</div>
 					<div>直播窗口背景</div>
 					<div>视频logo及水印</div>
 					<div>公众号设置</div>
@@ -66,6 +66,9 @@
 			jump(url){
 				console.log('点击',url)
 				this.$emit('allList',url)
+			},
+			routerLinke(url){
+				
 			}
 		},
 	};

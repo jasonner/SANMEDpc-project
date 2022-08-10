@@ -5,21 +5,21 @@
     </div>
     <div class="content-list">
       <div class="list-left">
-        <el-switch v-model="openValue" inactive-text="显示开关"></el-switch>
+        <el-switch v-model="peopleList.openValue" inactive-text="显示开关"></el-switch>
         <div class="countdown-display-position">
             <span >显示形式&nbsp;&nbsp;:&nbsp;&nbsp;</span>
-            <el-radio v-model="radioCountdownVal" :disabled="!openValue" label="1">真实在线人数</el-radio>
-            <el-radio v-model="radioCountdownVal" :disabled="!openValue" label="2">真实累计人数(观看人数)</el-radio>
+            <el-radio v-model="peopleList.type" :disabled="!peopleList.openValue" label="1">真实在线人数</el-radio>
+            <el-radio v-model="peopleList.type" :disabled="!peopleList.openValue" label="2">真实累计人数(观看人数)</el-radio>
         </div>
         <div class="live-prompt-text">
             <div><span >增加形式&nbsp;:</span></div>
-            <div><el-checkbox :disabled="!openValue" v-model="BaseNumberChecked">默认基础人数</el-checkbox></div>
-            <div><el-input class="live-prompt-input" :disabled='!BaseNumberChecked ||!openValue' type="number" v-model="BaseNumberVal" placeholder="0"></el-input><span class="people-number">人</span></div>
+            <div><el-checkbox :disabled="!peopleList.openValue" v-model="BaseNumberChecked">默认基础人数</el-checkbox></div>
+            <div><el-input class="live-prompt-input" :disabled='!BaseNumberChecked ||!peopleList.openValue' type="number" v-model="peopleList.baseNumber" placeholder="0"></el-input><span class="people-number">人</span></div>
         </div>
         <div class="live-prompt-text">
-            <div class="actualNumber"><el-checkbox :disabled="!openValue" v-model="actualNumberChecked">实际人数</el-checkbox> <span style="font-size:12px;margin-left:2px">X</span></div>
+            <div class="actualNumber"><el-checkbox :disabled="!peopleList.openValue" v-model="actualNumberChecked">实际人数</el-checkbox> <span style="font-size:12px;margin-left:2px">X</span></div>
             <div>
-                <el-select class="select-people-number"  :disabled="!actualNumberChecked || !openValue" v-model="actualNumberVal" placeholder="请选择">
+                <el-select class="select-people-number"  :disabled="!actualNumberChecked || !peopleList.openValue" v-model="peopleList.multiple" placeholder="请选择">
                     <el-option
                     v-for="item in actualNumberoptions"
                     :key="item.value"
@@ -42,25 +42,15 @@
       </div>
     </div>
     <div class="list-footer">
-        <el-button type="primary">提交</el-button>
+        <el-button type="primary" @click="submitChange()">提交</el-button>
     </div>
   </div>
 </template>
 <script>
+import qs from 'qs'
 export default {
     data() {
         return {
-            openValue:true,
-            radioCountdownVal:'1',
-            tipVal:'距直播开始',
-            startDatetime:'',
-            actualNumberVal:'1',
-            pickerOptions: {
-                disabledDate(v) {
-                return v.getTime() < new Date().getTime() - 86400000;
-                }
-            },
-            BaseNumberVal:'0',
             BaseNumberChecked:false,
             actualNumberChecked:false,
             actualNumberoptions:[{
@@ -94,15 +84,85 @@ export default {
                 value: '10',
                 label: '10'
             }],
+            liveid:'',
+            peopleList:{
+                openValue:false,
+                type:'1',
+                baseNumber:0,//基础人数
+                multiple:1//倍数
+            }
         };
     },
     mounted() {
-
+        var query=this.$route.query;
+        if(query && query.userid){
+            this.getLiveDetail(query.userid,query.channel);
+        }else{
+            this.$router.push('/index');
+        };
     },
     methods: {
-        startTimeChange(val){
-            console.log(val);
-        }
+        //获取直播详情
+        getLiveDetail(userid,channel){
+            let that = this;
+            that.axios.get('live/query?userid='+userid+'&channel='+channel)
+            .then(function (res) {
+                console.log(res.data)
+                if(res.data.code && res.data.code == '200'){
+                if(res.data.s){
+                    that.liveid = res.data.data.id;
+                    that.$nextTick(() => {
+                        that.getLiveSetting();
+                    })
+                };
+                }else{
+                    console.log(res.data.msg);
+                };
+            });
+        },
+
+        //获取频道设置
+        getLiveSetting(){
+            let that = this;
+            that.axios.get('live/query-decorate?liveid='+ that.liveid)
+            .then(function (res) {
+                console.log(res.data.data.people)
+                if(res.data.code && res.data.code == '200'){
+                if(res.data.s){
+                    if(res.data.data.people && res.data.data.people !='null'){
+                        that.peopleList =  JSON.parse(res.data.data.people);
+                    };
+                };
+                }else{
+                    that.$message.error(res.data.msg);
+                };
+            });
+        },
+
+        //提交数据
+        submitChange(){
+            let that = this;
+            let promise = {
+                'liveid':that.liveid,
+                'people':JSON.stringify(that.peopleList),
+            };
+            that.axios.post('live/decorate',qs.stringify(promise)).then((res) => {
+                console.log(res.data);
+                if (res.data.code && res.data.code =='200') {
+                if(res.data && res.data.s){
+                    that.$message({
+                        message: res.data.msg,
+                        type: 'success'
+                    });
+                }else{
+                    that.$message.error(res.data.msg); 
+                }	
+                } else {
+                that.$message.error(res.data.msg);
+                }
+			});
+        },
+
     },
 };
 </script>

@@ -34,7 +34,11 @@
 .compon-top .active {
 	color: rgb(30, 120, 220)
 }
-
+::-webkit-scrollbar {
+	display: none; /* Chrome Safari */
+	-ms-overflow-style: none;
+	scrollbar-width: none; /* Firefox */
+}
 
 /* 左侧列表栏 */
 .compon-left {

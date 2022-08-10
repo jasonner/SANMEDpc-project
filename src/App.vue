@@ -16,7 +16,15 @@
 			Top
 		},
 		mounted() {},
-		methods: {},
+		methods: {
+			alertChange(){
+				this.$notify({
+					title: '警告',
+					message: '这是一条警告的提示消息',
+					type: 'warning'
+				});
+			}
+		},
 	};
 </script>
 

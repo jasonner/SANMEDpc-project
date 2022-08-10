@@ -174,7 +174,7 @@ export default {
 					console.log(res.data);
 					if (res.data.code && res.data.code =='200') {
 						if(res.data && res.data.s){
-                            that.$router.push('/index');
+                            that.$router.push('/index');n
                             that.$router.push({path: '/index', query:{name: that.loginList.userName}});
                             that.loginList.userName='';
                             that.loginList.password='';

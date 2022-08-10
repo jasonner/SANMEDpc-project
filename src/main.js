@@ -11,9 +11,6 @@ import VideoJs from 'video.js'
 import 'videojs-contrib-hls'
 import 'videojs-flash'
 import 'video.js/dist/video-js.css'
-import VueQuillEditor from 'vue-quill-editor'
-import 'quill/dist/quill.core.css'
-import 'quill/dist/quill.snow.css'
 Vue.prototype.$video = VideoJs
 
 Vue.prototype.$axios = axios
@@ -25,8 +22,7 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 router.afterEach((to,from,next) => {
   window.scrollTo(0,0);
 });
-Vue.use(VueAxios, axios)
-Vue.use(VueQuillEditor);
+Vue.use(VueAxios, axios);
 new Vue({
   router,
   store,

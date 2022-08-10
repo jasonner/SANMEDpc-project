@@ -3,14 +3,14 @@
 		<div class="PMleft">
 			<el-menu class="el-menu-vertical-demo"  :unique-opened='true' :default-active="isActiveVal" @select="selectChange"  @open="handleOpen"
 			>
-				<el-submenu index="1">
+				<!-- <el-submenu index="1">
 					<template slot="title">
 						<span>全部功能</span>
 					</template>
 					<el-menu-item-group>
 						<el-menu-item index="1-1" style="display:none">全部功能</el-menu-item>
 					</el-menu-item-group>
-				</el-submenu>
+				</el-submenu> -->
 				<el-submenu index="2">
 					<template slot="title">
 						<span>基础设置</span>
@@ -21,9 +21,10 @@
 						<el-menu-item index="2-3">直播倒计时</el-menu-item>
 						<el-menu-item index="2-4">观众人数显示设置</el-menu-item>
 						<el-menu-item index="2-5">点赞设置</el-menu-item>
-						<el-menu-item index="2-6">直播窗口背景</el-menu-item>
+						<el-menu-item index="2-6">直播窗口设置</el-menu-item>
+						<!-- <el-menu-item index="2-6">直播窗口背景</el-menu-item>
 						<el-menu-item index="2-7">视频logo及水印</el-menu-item>
-						<el-menu-item index="2-8">公众号设置</el-menu-item>
+						<el-menu-item index="2-8">公众号设置</el-menu-item> -->
 					</el-menu-item-group>
 				</el-submenu>
 				<el-submenu index="3">
@@ -31,11 +32,31 @@
 						<span>授权观看</span>
 					</template>
 					<el-menu-item-group>
-						<el-menu-item index="3-1">授权类型</el-menu-item>
-						<el-menu-item index="3-2">付费记录</el-menu-item>
+						<el-menu-item index="3-1">观众白名单</el-menu-item>   
+						<!-- <el-menu-item index="3-2">付费记录</el-menu-item>
 						<el-menu-item index="3-3">手机号登录记录</el-menu-item>
 						<el-menu-item index="3-4">手机白名单</el-menu-item>
-						<el-menu-item index="3-5">观众白名单</el-menu-item>
+						<el-menu-item index="3-5">授权类型</el-menu-item> -->
+					</el-menu-item-group>
+				</el-submenu>
+				<el-submenu index="4">
+					<template slot="title">
+						<span>分享及嵌入</span>
+					</template>
+					<el-menu-item-group>
+						<el-menu-item index="4-1">微信分享设置</el-menu-item>   
+						<!-- <el-menu-item index="3-2">付费记录</el-menu-item>
+						<el-menu-item index="3-3">手机号登录记录</el-menu-item>
+						<el-menu-item index="3-4">手机白名单</el-menu-item>
+						<el-menu-item index="3-5">授权类型</el-menu-item> -->
+					</el-menu-item-group>
+				</el-submenu>
+				<el-submenu index="5">
+					<template slot="title">
+						<span>自定义菜单</span>
+					</template>
+					<el-menu-item-group>
+						<el-menu-item index="5-1">菜单设置</el-menu-item>  
 					</el-menu-item-group>
 				</el-submenu>
 			</el-menu>
@@ -43,19 +64,27 @@
 
 		<div class="PMright">
 			<!-- 全部功能 -->
-			<MenuContent v-show="isActiveVal =='1-1'"></MenuContent>
+			<MenuContent v-if="isActiveVal =='1-1'"></MenuContent>
 			<!-- 观看页主题设置 -->
-			<ThemeSetting v-show="isActiveVal =='2-1'"></ThemeSetting>
+			<ThemeSetting v-if="isActiveVal =='2-1'"></ThemeSetting>
 			<!-- 直播引导图 -->
-			<LiveGuide  v-show="isActiveVal =='2-2'"></LiveGuide>
+			<LiveGuide  v-if="isActiveVal =='2-2'"></LiveGuide>
 			<!-- 直播倒计时 -->
-			<LiveCountdown  v-show="isActiveVal =='2-3'"></LiveCountdown>
+			<LiveCountdown  v-if="isActiveVal =='2-3'"></LiveCountdown>
 			<!-- 观众人数设置 -->
-			<SettingPopNum v-show="isActiveVal =='2-4'"></SettingPopNum>
+			<SettingPopNum v-if="isActiveVal =='2-4'"></SettingPopNum>
 			<!-- 点赞设置 -->
-			<LikesSetting v-show="isActiveVal =='2-5'"></LikesSetting>
+			<LikesSetting v-if="isActiveVal =='2-5'"></LikesSetting>
+			<!-- 直播窗口设置 -->
+			<Setlivecover v-if="isActiveVal =='2-6'"></Setlivecover>
 			<!-- 授权类型 -->
-			<AuthorizedViewing v-show="isActiveVal =='3-1'"></AuthorizedViewing>	
+			<AuthorizedViewing v-if="isActiveVal =='3-1'"></AuthorizedViewing>	
+			<!-- 用户白名单 -->
+			<WhiteList v-if="isActiveVal =='3-5'"></WhiteList>	
+			<!-- 微信分享设置 -->
+			<WechatShareSet v-if="isActiveVal =='4-1'"></WechatShareSet>
+			<!-- 自定义菜单 -->
+			<Custommenu v-if="isActiveVal =='5-1'"></Custommenu>		
 		</div>
 	</div>
 </template>
@@ -70,10 +99,14 @@
 	import SettingPopNum from '@/components/settingPopNum.vue'
 	import LikesSetting from '@/components/likesSetting.vue' 
 	import AuthorizedViewing from '@/components/authorizedViewing.vue'
+	import WhiteList from '@/components/whiteList.vue'
+	import Setlivecover from '@/components/setlivecover.vue'
+	import WechatShareSet from '@/components/wechatShareSet.vue'
+	import Custommenu from '@/components/custommenu.vue'
 	export default {
 		data() {
 			return {
-				isActiveVal:'1-1'
+				isActiveVal:'2-1'
 			}
 		},
 		components: {
@@ -83,7 +116,11 @@
 			LiveCountdown,
 			SettingPopNum,
 			LikesSetting,
-			AuthorizedViewing
+			AuthorizedViewing,
+			WhiteList,
+			Setlivecover,
+			WechatShareSet,
+			Custommenu
 		},
 		mounted() {
 			if(sessionStorage.getItem('index')){
@@ -104,6 +141,12 @@
 					case '3':
 						this.isActiveVal = '3-1'
 						break;
+					case '4':
+						this.isActiveVal = '4-1'
+						break;
+					case '5':
+						this.isActiveVal = '5-1'
+					break;
 					default:
 						break;
 				};
@@ -144,7 +187,7 @@
 		color: #fff;
 		font-size: 16px;
 		text-align: center;
-		background-color: #4ea5df !important;
+		background-color: #f6ab00 !important;
 	}
 	.menuListPage .PMleft .el-menu-item {
 		line-height: 35px;
